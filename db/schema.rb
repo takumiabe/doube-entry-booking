@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_20_084401) do
+ActiveRecord::Schema.define(version: 2021_03_20_085019) do
+
+  create_table "account_statements", force: :cascade do |t|
+    t.integer "account_id", null: false
+    t.date "date"
+    t.integer "closing_balance"
+    t.integer "total_credit"
+    t.integer "total_debit"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id"], name: "index_account_statements_on_account_id"
+  end
 
   create_table "accounts", force: :cascade do |t|
     t.string "name"
@@ -19,4 +30,5 @@ ActiveRecord::Schema.define(version: 2021_03_20_084401) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  add_foreign_key "account_statements", "accounts"
 end
