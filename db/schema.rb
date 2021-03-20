@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_20_085753) do
+ActiveRecord::Schema.define(version: 2021_03_20_092737) do
 
   create_table "account_statements", force: :cascade do |t|
     t.integer "account_id", null: false
@@ -21,6 +21,18 @@ ActiveRecord::Schema.define(version: 2021_03_20_085753) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["account_id"], name: "index_account_statements_on_account_id"
+  end
+
+  create_table "account_transactions", force: :cascade do |t|
+    t.integer "ledger_id", null: false
+    t.integer "account_id", null: false
+    t.string "xacttype"
+    t.string "xacttype_ext"
+    t.integer "amount"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id"], name: "index_account_transactions_on_account_id"
+    t.index ["ledger_id"], name: "index_account_transactions_on_ledger_id"
   end
 
   create_table "accounts", force: :cascade do |t|
@@ -38,4 +50,6 @@ ActiveRecord::Schema.define(version: 2021_03_20_085753) do
   end
 
   add_foreign_key "account_statements", "accounts"
+  add_foreign_key "account_transactions", "accounts"
+  add_foreign_key "account_transactions", "ledgers"
 end
