@@ -5,6 +5,24 @@ class Account < ApplicationRecord
   enum xacttype: { credit: 'cr', debit: 'dr' }
   validates :name, :xacttype, presence: true
 
+  def deposit(amount)
+    cash = Ledger.where(name: '現金').first!
+    account_transactions.create!(ledger: cash, xacttype: :debit, xacttype_ext: :deposit, amount: amount)
+  end
+
+  def withdraw(amount)
+    cash = Ledger.where(name: '現金').first!
+
+    transaction do
+      if current_statement[:current_balance] > amount
+        account_transactions.create!(ledger: cash, xacttype: :credit, xacttype_ext: :withdrawal, amount: amount)
+      else
+        # not enough
+        false
+      end
+    end
+  end
+
   def current_statement
     last_statement = account_statements.where(date: Date.today.beginning_of_month).first
 
